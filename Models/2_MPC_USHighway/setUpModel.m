@@ -7,8 +7,8 @@ addpath(genpath('Images'));
 
 %% load the scene data files
 % load data from Driving Scenario Designer
-load('USHighway.mat');
-refPose = data.ActorSpecifications(1,46).Waypoints;
+load('FormulaStudent_skidpad.mat');
+refPose = data.ActorSpecifications.Waypoints;
 % define data for velocity lookup table
 lookUpt = readmatrix('velocityDistributionHighway.xlsx');
 xlt = lookUpt(2:42,1);
@@ -22,11 +22,11 @@ xRef = refPose(:,1);
 yRef = -refPose(:,2);
 
 %% define vehicle parameters used in the models
-L = 3; % bicycle length
-ld = 4; % lookahead distance
+L = 1.61; % bicycle length
+% ld = 4; % lookahead distance
 X_o = xRef(1); % initial vehicle position
 Y_o = yRef(1); % initial vehicle position 
-psi_o = 88.5*(pi/180); % it's an important step to initialize yaw angle
+psi_o = 0*(pi/180); % it's an important step to initialize yaw angle
 
 %% calculating reference pose vectors
 % Based on how far the vehicle travels, the pose is generated using 1-D
@@ -59,12 +59,12 @@ tRef = linspace(0,Ts,length(gradbp)); % this time variable is used in the "2D Vi
 % vehicle parameters
 tau = 0.5;
 Vx = 10;
-m = 2000;
-Iz = 4000;
-Lf = 1.4;
-Lr = 1.6;
-Cf = 12e3;
-Cr = 11e3;
+m = 260;
+Iz = 600;
+Lf = 0.7245;
+Lr = 0.8855;
+Cf = 60000;
+Cr = 60000;
 % longitudinal model
 A1 = [-1/tau 0; 1 0];
 B1 = [1/tau; 0];
