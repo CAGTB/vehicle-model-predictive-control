@@ -51,6 +51,9 @@ xRef2s = smooth(gradbp,xRef2);
 % calculate curvature vector
 curvature = getCurvature(xRef2,yRef2);
 
+%计算路径偏差角度
+psi_path = getPsi_path(xRef2,yRef2);
+
 %% define reference time for plotting 
 s = size(xRef);
 tRef = linspace(0,Ts,length(gradbp)); % this time variable is used in the "2D Visulaization" for plotting the refernce points
@@ -123,4 +126,11 @@ D2X = gradient(DX);
 DY = gradient(yRef);
 D2Y = gradient(DY);
 curvature = (DX.*D2Y - DY.*D2X) ./(DX.^2+DY.^2).^(3/2);
+end
+
+function psi_path = getPsi_path(xRef,yRef)
+DX = gradient(xRef);
+DY = gradient(yRef);
+psi_path = atan2(DY, DX);
+psi_path = unwrap(psi_path);%加减2pi，减小角度跳变
 end
