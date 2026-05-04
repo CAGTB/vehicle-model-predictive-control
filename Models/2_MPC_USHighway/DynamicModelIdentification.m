@@ -1,0 +1,51 @@
+% 初始参数 (确保 Vx 不为 0)
+p_init = [0.5, 260, 600, 0.7245, 0.8855, 60000, 60000, 10];
+T = 0.1;
+
+% 创建模型 
+sys = idgrey('vehicle_grey_model', p_init, 'c');
+
+%% 2. 配置输入/输出的名称与单位
+% y = [Vx; Vy; gamma]
+sys.OutputName = {'Longitudinal velocity'; 'Lateral velocity'; 'Yaw rate'};
+sys.OutputUnit = {'m/s'; 'm/s'; 'rad/s'};
+
+% u = [ax; delta]
+sys.InputName  = {'Longitudinal acceleration'; 'Steering angle'};
+sys.InputUnit  = {'m/s^2'; 'rad'};
+
+%% 3. 配置参数名称和最小值
+% 为参数命名
+param_names = {'Time constant tau'; 'Vehicle mass'; 'Yaw inertia Iz'; ...
+               'Dist to front axle Lf'; 'Dist to rear axle Lr'; ...
+               'Front cornering stiffness Cf'; 'Rear cornering stiffness Cr'; ...
+               'Operating velocity Vx'};
+
+% 令所有参数大于 0
+sys.Structure.Parameters.Minimum = eps(0) * ones(1, 8);
+
+% 锁定不需要辨识的参数
+fix_idx = [1, 2, 3, 4, 5, 8]; 
+sys.Structure.Parameters.Free(fix_idx) = false;% 仅 Cf 和 Cr 会被辨识
+
+%%配置状态名称和单位
+% 1. 配置状态变量名称
+% 必须是 4x1 的 cell 数组
+sys.StateName = {'Longitudinal velocity'; ...
+                 'Longitudinal position'; ...
+                 'Lateral velocity'; ...
+                 'Yaw rate'};
+
+% 2. 配置状态变量单位 (StateUnit)
+% 必须是 4x1 的 cell 数组
+sys.StateUnit = {'m/s'; ...
+                 'm'; ...
+                 'm/s'; ...
+                 'rad/s'};
+
+%%
+present(sys);
+
+%% Input-Output Data
+
+%% plot data and compare result
