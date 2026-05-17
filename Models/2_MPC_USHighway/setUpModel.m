@@ -61,7 +61,7 @@ tRef = linspace(0,Ts,length(gradbp)); % this time variable is used in the "2D Vi
 %% Calculate A,B,C matrices used in MPC Model
 % vehicle parameters
 tau = 0.5;
-Vx = 10;
+Vx = 1;
 m = 260;
 Iz = 600;
 Lf = 0.7245;
